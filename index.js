@@ -1,11 +1,17 @@
 import Handlebars from "handlebars";
-import {copyAllFolders, readFileContent} from './utils.js';
+import {
+    copyAllFolders,
+    findHtmlFiles,
+    findSubFolders,
+    parseContent,
+    readFileContent, replacePrefix,
+    saveStringAsFile
+} from './utils.js';
 
 const rootFolder = './src';
 
 // IIFE to use top-level await
 (async () => {
-    // await iterateFolders(rootFolder);
     const head = await readFileContent('src/_partial/head.handlebars');
     const header = await readFileContent('src/_partial/header.handlebars');
     const footer = await readFileContent('src/_partial/footer.handlebars');
@@ -19,12 +25,31 @@ const rootFolder = './src';
     Handlebars.registerPartial('footer', footer);
     const template = Handlebars.compile(layout, {noEscape: true});
 
-    const data = {
-        'content': '<p>Hello</p>',
-        'title': 'My Page',
-    };
-    console.log(template(data));
+    await copyAllFolders(rootFolder + '/_assets', 'public')
 
-    await copyAllFolders('src/_assets', 'public')
+    const folders = [rootFolder, ...(await findSubFolders(rootFolder))]
+    await generateHtmlFiles(folders, template);
+
+    await complete();
 
 })();
+
+const generateHtmlFiles = async (folders, template) => {
+    for (const folder of folders) {
+        const beforeContent = await readFileContent(folder + '/_before.html', 'utf8');
+        const afterContent = await readFileContent(folder + '/_after.html', 'utf8');
+        const htmlFiles = await findHtmlFiles(folder);
+        for (const file of htmlFiles) {
+            const [title, content] = await parseContent(file);
+            const htmlContent = template({
+                title: title,
+                content: beforeContent + content + afterContent,
+            })
+            await saveStringAsFile(htmlContent, replacePrefix(file, 'src', 'public'));
+        }
+    }
+}
+
+const complete = async () => {
+    console.log("All pages have been generated! 🎉");
+}
