@@ -1,0 +1,16 @@
+{
+  "name": "landing-page-generator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
