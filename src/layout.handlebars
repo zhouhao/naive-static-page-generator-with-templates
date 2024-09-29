@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{{#if title}}{{title}}{{else}}My Website{{/if}}</title>
-    {{head}}
+    {{> head}}
 </head>
 <body>
 
-{{header}}
+{{> header}}
+
 
 {{content}}
 
-{{footer}}
+
+{{> footer}}
 
 </body>
 </html>
