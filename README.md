@@ -1,6 +1,9 @@
 # Naive static page generator
 
-![icon](icon.png)
+<p align="center">
+  <img src="icon.png" alt="Naive static page generator icon">
+</p>
+
 
 ### Background
 
