@@ -1,0 +1,1 @@
+# naive static page generator
